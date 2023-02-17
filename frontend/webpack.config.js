@@ -29,6 +29,10 @@ module.exports = {
     modules: [__dirname, "src", "node_modules"],
     extensions: ["*", ".js", ".jsx", ".tsx", ".ts"],
   },
+  watchOptions: {
+    aggregateTimeout: 300,
+    poll: 1000,
+  },
   module: {
     rules: [
       {

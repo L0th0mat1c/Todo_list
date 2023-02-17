@@ -1,14 +1,33 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
     "lib": ["es6"],
-    "allowJs": true,
     "outDir": "build",
     "rootDir": "src",
     "strict": true,
+    "resolveJsonModule": true,
+    "noEmit": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "exactOptionalPropertyTypes": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitThis": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "noImplicitAny": true,
-    "esModuleInterop": true,
-    "resolveJsonModule": true
+    "noImplicitReturns": true,
+    "alwaysStrict": true,
+    "strictBindCallApply": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "useUnknownInCatchVariables": true,
+    "module": "ES2022",
+    "moduleResolution": "node",
+    "target": "ES2022",
+    "jsx": "react",
+    "allowJs": true,
+    "checkJs": true,
+    "esModuleInterop": true
+    // "isolatedModules": true
   }
 }
