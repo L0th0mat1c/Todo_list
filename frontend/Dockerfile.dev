@@ -1,0 +1,15 @@
+FROM node:16.17.0
+
+WORKDIR /usr/src/frontend
+
+COPY package*.json ./
+
+RUN npm install -g npm@9.5.0
+
+RUN npm install --no-progress --ignore-optional
+
+COPY . .
+
+EXPOSE 3000
+
+CMD ["npm", "run", "start"]

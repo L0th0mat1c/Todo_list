@@ -4,11 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "rm -rf ./build && tsc",
     "lint": "eslint . --ext .ts",
     "lint-and-fix": "eslint . --ext .ts --fix",
-    "start": "npm run build && node build/index.js",
-    "start:dev": "npx nodemon",
+    "start": "node index.ts NODE_ENV=production",
+    "start:dev": "npx nodemon NODE_ENV=development",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

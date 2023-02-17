@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+    container_name: "frontend"
+    environment:
+      EXPRESS_HOST: api
+    networks:
+      - default
+
+  api:
+    build:
+      context: ./api
+    container_name: "api"
+    ports:
+      - "8000:8000"
+    env_file: ./api/.env
+    environment:
+      HOST: 0.0.0.0
+      MONGO_HOST: mongo
+    networks:
+      - default
+    depends_on:
+      - db
+
+  db:
+    image: mongo:latest
+    container_name: "db"
+    ports:
+      - "127.0.0.1:27000:27017"
+    networks:
+      - default
+    volumes:
+      - mongo-data:/data/db
+
+networks:
+  default:
+    driver: bridge
+
+volumes:
+  mongo-data:
+  node_modules:
