@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { Layout, Typography } from "antd";
 import styled from "styled-components";
+import { useLocation } from "react-router-dom";
 
 const { Header, Content, Footer } = Layout;
 
@@ -46,13 +47,13 @@ const { Title } = Typography;
 
 interface BasicLayoutProps {
   children: JSX.Element;
-  path: string;
 }
 
-const BasicLayout = ({ children, path }: BasicLayoutProps) => {
+const BasicLayout = ({ children }: BasicLayoutProps) => {
+  const location = useLocation();
   useEffect(() => {
     window.scroll(0, 0);
-  }, [path]);
+  }, [location]);
 
   return (
     <StyledLayout as={Layout}>
