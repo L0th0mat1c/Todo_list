@@ -8,36 +8,83 @@ services:
     environment:
       EXPRESS_HOST: api
     networks:
-      - default
+      - api
 
-  api:
+  api_gateway:
     build:
-      context: ./api
-    container_name: "api"
+      context: ./api/gateway
+    container_name: "gateway"
+    links:
+      - db_gateway
     ports:
       - "8000:8000"
-    env_file: ./api/.env
-    environment:
-      HOST: 0.0.0.0
-      MONGO_HOST: mongo
+    env_file: ./api/gateway/.env.dev
     networks:
-      - default
+      api:
+        ipv4_address: 172.28.1.1
     depends_on:
-      - db
+      - db_gateway
+      - api_todos
+    stdin_open: true
 
-  db:
+  db_gateway:
     image: mongo:latest
-    container_name: "db"
+    container_name: "db_gateway"
     ports:
       - "127.0.0.1:27000:27017"
     networks:
-      - default
+      - api
     volumes:
-      - mongo-data:/data/db
+      - mongo-data:/data/db_gateway
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+      - MONGO_INITDB_DATABASE=todoaccount
+    restart: always
+    command: >
+      bash -c "mongod --quiet --logpath /tmp/mongo.log --setParameter logLevel=0 > /dev/null 2>&1 
+      && mongosh -u root -p root --authenticationDatabase admin"
+
+  api_todos:
+    build:
+      context: ./api/todos
+    container_name: "todos"
+    links:
+      - db_todos
+    ports:
+      - "8001:8000"
+    env_file: ./api/todos/.env.dev
+    networks:
+      api:
+        ipv4_address: 172.28.1.2
+    depends_on:
+      - db_todos
+    stdin_open: true
+
+  db_todos:
+    image: mongo:latest
+    container_name: "db_todos"
+    ports:
+      - "127.0.0.1:27001:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+      - MONGO_INITDB_DATABASE=todolist
+    networks:
+      - api
+    volumes:
+      - mongo-data:/data/db_todos
+    restart: always
+    command: >
+      bash -c "mongod --quiet --logpath /tmp/mongo.log --setParameter logLevel=0 > /dev/null 2>&1 
+      && mongosh -u root -p root --authenticationDatabase admin"
 
 networks:
-  default:
-    driver: bridge
+  api:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16
 
 volumes:
   mongo-data:
