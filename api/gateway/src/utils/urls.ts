@@ -1,7 +1,9 @@
+const URL_TODOS = process.env["HTTP_PROXY_TODOS"] || "http://localhost";
+
 const urls = [
   {
     route_name: "todos",
-    url: "http://localhost:8001",
+    url: URL_TODOS,
   },
 ];
 

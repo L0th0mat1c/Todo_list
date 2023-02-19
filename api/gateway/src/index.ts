@@ -16,12 +16,12 @@ import about from "./utils/about.json";
 import fs from "fs";
 import path from "path";
 import urls from "./utils/urls";
-import { createProxyMiddleware } from "http-proxy-middleware";
+import { createProxyMiddleware, fixRequestBody } from "http-proxy-middleware";
 
 config();
 
-const port = process.env["PORT"] || 8000;
-const baseUrl = process.env["BASE_URL"] || "http://localhost";
+const port = process.env["PORT_GATEWAY"] || 8000;
+const baseUrl = process.env["BASE_URL_GATEWAY"] || "http://localhost";
 const secret = process.env["SESSION_SECRET"] || "";
 const store = new session.MemoryStore();
 
@@ -52,8 +52,8 @@ app.use(bodyParser.json());
 
 app.use(
   rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 5, // 5 calls
+    windowMs: 10 * 60 * 1000,
+    max: 100,
   })
 );
 
@@ -71,6 +71,7 @@ urls.forEach(({ route_name, url }) => {
     target: url,
     changeOrigin: true,
     logger: console,
+    onProxyReq: fixRequestBody,
   };
   const proxy = createProxyMiddleware(options);
   app.use(`/${route_name}`, proxy);
@@ -81,6 +82,7 @@ const basePath = path.join(__dirname, "../../gateway/src/routes");
 fs.readdir(basePath, (_err, files) => {
   try {
     files.forEach((file) => {
+      console.log(file);
       app.use("/", require("./routes/" + file));
     });
     logger.info("Router initialized");

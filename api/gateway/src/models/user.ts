@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
-const saltRound = process.env["SALT_ROUND"] || 10;
+const saltRound = parseInt(process.env["SALT_ROUND"] || "10", 10);
 const hashPassword = (password: string | Buffer) =>
   bcrypt.hashSync(password, saltRound);
 

@@ -7,7 +7,13 @@ services:
     environment:
       NODE_ENV: production
 
-  api:
+  api_gateway:
+    build:
+      dockerfile: ./Dockerfile.prod
+    environment:
+      NODE_ENV: production
+
+  api_todos:
     build:
       dockerfile: ./Dockerfile.prod
     environment:

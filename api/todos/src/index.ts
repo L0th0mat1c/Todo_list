@@ -1,41 +1,34 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import express from "express";
 import { config } from "dotenv";
-import { rateLimit } from "express-rate-limit";
 import responseTime from "response-time";
-import cors from "cors";
-import helmet from "helmet";
-import bodyParser from "body-parser";
 import morganMiddleware from "./middlewares/morgan.middleware";
 import logger from "./utils/logger";
+import bodyParser from "body-parser";
 import { connect } from "./utils/db";
+import cors from "cors";
 import fs from "fs";
 import path from "path";
 
 config();
 
-const port = process.env["PORT"] || 8000;
-const baseUrl = process.env["BASE_URL"] || "http://localhost";
+const port = process.env["PORT_TODOS"] || 8001;
+const baseUrl = process.env["BASE_URL_TODOS"] || "http://localhost";
 
 connect();
 
 const app = express();
 
 app.use(
-  cors({ origin: "*", credentials: true, exposedHeaders: ["set-cookie"] })
+  cors({
+    origin: "http://localhost:8000",
+  })
 );
-app.use(helmet());
+
 app.use(responseTime());
 app.use(morganMiddleware);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
-app.use(
-  rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 5, // 5 calls
-  })
-);
 
 const basePath = path.join(__dirname, "../../todos/src/routes");
 

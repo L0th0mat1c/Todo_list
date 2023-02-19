@@ -1,6 +1,6 @@
 FROM node:16.17.0
 
-WORKDIR /usr/src/api
+WORKDIR /usr/src/api/gateway
 
 COPY package*.json ./
 

@@ -4,11 +4,13 @@ import Todo from "../models/todo";
 const router = express.Router();
 
 const getAllTodos = async (_req: Request, res: Response) => {
+  console.log("test");
   try {
     const todos = await Todo.find().lean();
 
     return res.json({ success: true, todos });
   } catch (e) {
+    console.log(e);
     return res.status(500).json(e);
   }
 };
@@ -35,6 +37,7 @@ const createTodo = async ({ body }: Request, res: Response) => {
 
     return res.json({ success: true, id: todo._id });
   } catch (e) {
+    console.log(e);
     return res.status(500).json(e);
   }
 };

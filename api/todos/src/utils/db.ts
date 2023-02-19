@@ -4,10 +4,10 @@ import mongoose from "mongoose";
 
 config();
 
-const HOST = process.env["HOST"];
-const PORT = process.env["PORT"];
-const DATA = process.env["DATA"];
-const DB_URL = process.env["DB_URL"] || "";
+const HOST = process.env["HOST_DB_TODOS"];
+const PORT = process.env["PORT_DB_TODOS"];
+const DATA = process.env["DATA_DB_TODOS"];
+const DB_URL = process.env["DB_URL_TODOS"] || "";
 
 const uri = `mongodb://${HOST}:${PORT}/${DATA}`;
 const options = {
