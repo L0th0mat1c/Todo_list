@@ -1,0 +1,8 @@
+{
+  "name": "Todo list for PO",
+  "version": "1.0.0",
+  "description": "API for todo list project.",
+  "author": "LothomoDev",
+  "license": "ISC",
+  "more": "/api-docs"
+}
