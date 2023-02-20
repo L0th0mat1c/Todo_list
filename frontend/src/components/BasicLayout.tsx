@@ -65,7 +65,7 @@ const BasicLayout = ({ children }: BasicLayoutProps) => {
         </Header>
         <StyledContent as={Content}>{children}</StyledContent>
         <StyledFooter as={Footer}>
-          <p>Todo list for Sogeti</p>
+          <p>Todo list project</p>
         </StyledFooter>
       </Layout>
     </StyledLayout>

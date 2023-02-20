@@ -1,9 +1,13 @@
 import React, { Key } from "react";
 import { Form, FormItemProps, Input } from "antd";
+import { NamePath } from "antd/es/form/interface";
 
 interface UseGenerateFormItemProps extends FormItemProps {
   input: JSX.Element;
   key: Key;
+  label?: "";
+  name: NamePath;
+  rules: object[];
 }
 
 const useGenerateFormItem = () => {

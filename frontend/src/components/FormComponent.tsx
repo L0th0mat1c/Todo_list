@@ -1,20 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Button, Form, Input } from "antd";
+import { Button, Form } from "antd";
 import { FormLayout } from "antd/es/form/Form";
 import useGenerateFormItem from "src/utils/useGenerateFormItem";
-
-interface FormComponentProps {
-  fields: Array<object>;
-  name?: string;
-  layout?: string;
-  onFinish: (values: object | null) => void;
-}
-
-interface FieldProps {
-  name: string;
-  rules?: Array<object> | [];
-  input: JSX.Element;
-}
+import { FormComponentProps } from "src/@types/formComponent";
 
 const FormComponent = ({
   onFinish,
@@ -30,12 +18,18 @@ const FormComponent = ({
     forceUpdate({});
   }, []);
 
+  const handleSubmit = (values: object | null) => {
+    onFinish(values);
+
+    form.resetFields();
+  };
+
   return (
     <Form
       form={form}
       name={name}
       layout={layout as FormLayout}
-      onFinish={onFinish}
+      onFinish={handleSubmit}
     >
       {fields.map((field) => generateField(field))}
 
