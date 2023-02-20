@@ -31,6 +31,20 @@ const TodoContextProvider = ({ children }: ChildrenProps) => {
   };
 
   const changeStatusTodo = (id: string) => {
+    const newList = todos.filter((todo: ITodo) => {
+      if (todo.id === id) {
+        todo.status = !todo.status;
+        return todo;
+      }
+      return todo;
+    });
+
+    const newListSorted = newList.sort((todo) => {
+      return todo.status ? 1 : -1;
+    });
+
+    setTodos(newListSorted);
+
     success({ content: "Todo is updated !" });
   };
 
