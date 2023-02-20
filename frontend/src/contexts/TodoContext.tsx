@@ -6,15 +6,15 @@ import { TodoContextType, ITodo } from "../@types/todo";
 export const TodoContext = createContext<TodoContextType | null>(null);
 
 const TodoContextProvider = ({ children }: ChildrenProps) => {
-  const { success: success } = useErrorMessage();
+  const { success: success, warning: warning } = useErrorMessage();
   const [todos, setTodos] = useState<ITodo[]>([]);
+  const [displayModeList, setDisplayModeList] = useState<boolean>(false);
   const [loading] = useState(false);
 
   const saveTodo = ({ title }: ITodo) => {
     const newTodo: ITodo = {
-      id: Math.round(Math.random() * 10).toString(),
+      id: Math.round(Math.random() * 10000).toString(),
       title: title,
-      description: "no description",
       status: false,
       createdDate: new Date(),
     };
@@ -31,13 +31,18 @@ const TodoContextProvider = ({ children }: ChildrenProps) => {
   };
 
   const changeStatusTodo = (id: string) => {
-    todos.filter((todo: ITodo) => {
-      if (todo.id === id) {
-        todo.status = !todo.status;
-        setTodos([...todos]);
-      }
-    });
     success({ content: "Todo is updated !" });
+  };
+
+  const removeTodo = (id: string) => {
+    console.log(id);
+    const newListTodosAfterDeletion = todos.filter(
+      (todo: ITodo) => todo.id !== id
+    );
+
+    setTodos(newListTodosAfterDeletion);
+
+    warning({ content: "Todo is removed !" });
   };
 
   return (
@@ -47,6 +52,9 @@ const TodoContextProvider = ({ children }: ChildrenProps) => {
         loading,
         saveTodo,
         changeStatusTodo,
+        displayModeList,
+        setDisplayModeList,
+        removeTodo,
       }}
     >
       {children}

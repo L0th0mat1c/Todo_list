@@ -9,7 +9,7 @@ const Router = () => {
       <BasicLayout>
         <Routes>
           {routes.map(({ path, component }): JSX.Element => {
-            return <Route path={path} element={component} />;
+            return <Route key={path} path={path} element={component} />;
           })}
         </Routes>
       </BasicLayout>
