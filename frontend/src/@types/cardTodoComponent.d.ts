@@ -1,6 +1,6 @@
 import { CardProps } from "antd";
 
-export interface CardComponentProps extends CardProps {
+export interface CardTodoComponentProps extends CardProps {
   id: string;
   title: string;
   description?: string;
@@ -8,4 +8,5 @@ export interface CardComponentProps extends CardProps {
   actions?: Array<JSX.Element>;
   loading: boolean;
   checkOnClick: (id: string) => void;
+  removeTodo: (id: string) => void;
 }
