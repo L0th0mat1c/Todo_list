@@ -1,6 +1,6 @@
 FROM node:16.17.0
 
-WORKDIR /usr/src/api
+WORKDIR /usr/src/api/todos
 
 COPY package*.json ./
 
@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 8000
 
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "start:dev"]
