@@ -2,7 +2,7 @@ import { message } from "antd";
 
 interface MessageProps {
   status?: string;
-  content?: string;
+  content?: string | undefined;
   duration?: number;
 }
 const useErrorMessage = () => {
@@ -11,16 +11,16 @@ const useErrorMessage = () => {
       message.error(`Error server ${status}: ${content}`, duration);
     },
     success: ({ content, duration }: MessageProps) => {
-      message.success(content, duration);
+      message.success(content || "", duration);
     },
     info: ({ content, duration }: MessageProps) => {
-      message.info(content, duration);
+      message.info(content || "", duration);
     },
     warning: ({ content, duration }: MessageProps) => {
-      message.warning(content, duration);
+      message.warning(content || "", duration);
     },
     loading: ({ content, duration }: MessageProps) => {
-      message.warning(content, duration);
+      message.warning(content || "", duration);
     },
   };
 };

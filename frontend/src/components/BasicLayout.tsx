@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Layout, Typography } from "antd";
 import styled from "styled-components";
-import { useLocation } from "react-router-dom";
+import { useLocation, NavLink } from "react-router-dom";
 
 const { Header, Content, Footer } = Layout;
 
@@ -60,7 +60,7 @@ const BasicLayout = ({ children }: BasicLayoutProps) => {
       <Layout>
         <Header style={{ zIndex: 1, width: "100%" }}>
           <Title style={{ color: "white" }} level={2}>
-            Todo Sogeti
+            <NavLink to="/">Todo List</NavLink>
           </Title>
         </Header>
         <StyledContent as={Content}>{children}</StyledContent>

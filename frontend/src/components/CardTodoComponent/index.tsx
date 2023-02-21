@@ -1,43 +1,51 @@
 import {
   CheckCircleFilled,
   DeleteOutlined,
-  EditOutlined,
+  EyeOutlined,
   TabletFilled,
 } from "@ant-design/icons";
-import { Card } from "antd";
+import { Badge, Card } from "antd";
 import Meta from "antd/es/card/Meta";
 import React from "react";
+import { useNavigate } from "react-router";
 import { CardTodoComponentProps } from "src/@types/cardTodoComponent";
-import { IGetExtraProps } from "src/@types/collapseTodoComponent";
+import { ITodo } from "src/@types/todo";
 import { colorsContext } from "src/utils/constants/colors";
 
 const CardTodoComponent = ({
-  id,
-  title,
-  description,
-  status,
+  todo,
   actions,
   loading,
   checkOnClick,
   removeTodo,
+  getTodo,
   ...props
 }: CardTodoComponentProps): JSX.Element => {
-  const genExtra = ({ idTodo, statusTodo }: IGetExtraProps) => {
+  const navigate = useNavigate();
+
+  const genExtra = (todoSelected: ITodo) => {
     return [
-      !statusTodo && <EditOutlined key="edit" />,
+      !todoSelected.status && (
+        <EyeOutlined
+          key="edit"
+          onClick={() => navigate(`/todo/${todoSelected._id}`)}
+        />
+      ),
       <CheckCircleFilled
         style={{
-          color: statusTodo ? colorsContext.success : colorsContext.info,
+          color: todoSelected.status
+            ? colorsContext.success
+            : colorsContext.info,
         }}
         key="check"
-        onClick={() => checkOnClick(idTodo)}
+        onClick={() => checkOnClick(todoSelected)}
       />,
       <DeleteOutlined
         key="remove"
         style={{
           color: colorsContext.error,
         }}
-        onClick={() => removeTodo(idTodo)}
+        onClick={() => removeTodo(todoSelected._id || "")}
       />,
     ];
   };
@@ -45,25 +53,26 @@ const CardTodoComponent = ({
   return (
     <Card
       {...props}
-      key={id}
+      key={todo._id}
       style={{ width: 300, marginTop: 16 }}
       loading={loading}
-      actions={genExtra({ idTodo: id, statusTodo: status })}
+      actions={genExtra(todo)}
+      extra={<Badge count={todo.tasks.length} />}
+      title={todo.title}
     >
       <Meta
         style={{
-          textDecorationLine: status ? "line-through" : "none",
-          color: !description ? "grey" : "black",
+          textDecorationLine: todo.status ? "line-through" : "none",
+          color: todo!.description ? "grey" : "black",
         }}
         avatar={
           <TabletFilled
             style={{
-              color: status ? colorsContext.success : colorsContext.info,
+              color: todo.status ? colorsContext.success : colorsContext.info,
             }}
           />
         }
-        title={title}
-        description={!description ? "No description" : description}
+        description={!todo.description ? "No description" : todo.description}
       />
     </Card>
   );

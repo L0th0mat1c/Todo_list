@@ -5,11 +5,11 @@ import { TodoContext } from "../../../contexts/TodoContext";
 import { ITodo, TodoContextType } from "src/@types/todo";
 
 const AddTodoForm = (): JSX.Element => {
-  const { saveTodo } = useContext(TodoContext) as TodoContextType;
+  const { createTodo } = useContext(TodoContext) as TodoContextType;
   const { fields } = useFields();
 
   const onFinish = (values: ITodo) => {
-    saveTodo({ ...values });
+    createTodo({ ...values });
   };
 
   return (

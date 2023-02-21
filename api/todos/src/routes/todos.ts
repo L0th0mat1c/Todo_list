@@ -4,7 +4,6 @@ import Todo from "../models/todo";
 const router = express.Router();
 
 const getAllTodos = async (_req: Request, res: Response) => {
-  console.log("test");
   try {
     const todos = await Todo.find().lean();
 
@@ -53,6 +52,7 @@ const updateTodo = async ({ params, body }: Request, res: Response) => {
 };
 
 const deleteTodo = async ({ params }: Request, res: Response) => {
+  console.log(params);
   try {
     await Todo.deleteOne({ _id: params["id"] });
 
