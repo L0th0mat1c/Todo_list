@@ -1,0 +1,28 @@
+# build environment
+FROM node:16.17.0 as build
+WORKDIR /usr/src/frontend
+
+COPY package*.json ./
+
+RUN npm install -g npm@9.5.0
+
+RUN npm ci --silent --no-progress --ignore-optional
+
+RUN npm i -g date-fns date-fns-tz
+
+RUN npm install @types/date-fns --save-dev
+
+COPY . .
+
+RUN npm run build
+
+# production environment
+FROM nginx:stable-alpine
+
+COPY --from=build /usr/src/frontend/dist /usr/share/nginx/html
+
+COPY nginx/nginx.conf /etc/nginx/conf.d
+
+EXPOSE 8080
+
+CMD ["nginx", "-g", "daemon off;"]

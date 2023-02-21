@@ -1,0 +1,19 @@
+FROM node:16.17.0
+
+WORKDIR /usr/src/frontend
+
+COPY package*.json ./
+
+RUN npm install -g npm@9.5.0
+
+RUN npm install --no-progress --ignore-optional
+
+RUN npm i -g date-fns date-fns-tz
+
+RUN npm install @types/date-fns --save-dev
+
+COPY . .
+
+EXPOSE 3000
+
+CMD ["npm", "run", "start"]

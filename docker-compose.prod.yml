@@ -1,0 +1,20 @@
+services:
+  frontend:
+    build:
+      dockerfile: ./Dockerfile.prod
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      NODE_ENV: production
+
+  api_gateway:
+    build:
+      dockerfile: ./Dockerfile.prod
+    environment:
+      NODE_ENV: production
+
+  api_todos:
+    build:
+      dockerfile: ./Dockerfile.prod
+    environment:
+      NODE_ENV: production

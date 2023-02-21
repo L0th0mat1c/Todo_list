@@ -1,0 +1,33 @@
+services:
+  frontend:
+    build:
+      dockerfile: ./Dockerfile.dev
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - ./frontend:/usr/src/frontend
+      - ./tmp/npm:/root/.npm:z
+      - node_modules:/usr/src/frontend/node_modules
+    stdin_open: true
+    restart: always
+
+  api_gateway:
+    build:
+      dockerfile: Dockerfile.dev
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./api/gateway:/usr/src/api/gateway
+      - node_modules:/usr/src/api/node_modules
+
+  api_todos:
+    build:
+      dockerfile: Dockerfile.dev
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./api/todos:/usr/src/api/todos
+      - node_modules:/usr/src/api/node_modules
