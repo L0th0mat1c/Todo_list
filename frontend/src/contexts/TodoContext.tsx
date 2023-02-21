@@ -1,60 +1,132 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useContext } from "react";
+import { AuthContextType } from "src/@types/auth";
 import { ChildrenProps } from "src/@types/common";
 import useErrorMessage from "src/utils/useMessage";
 import { TodoContextType, ITodo } from "../@types/todo";
+import { AuthContext } from "./AuthContext";
 
 export const TodoContext = createContext<TodoContextType | null>(null);
 
 const TodoContextProvider = ({ children }: ChildrenProps) => {
   const { success: success, warning: warning } = useErrorMessage();
   const [todos, setTodos] = useState<ITodo[]>([]);
+  const [todoSelected, setTodoSelected] = useState<ITodo | undefined>();
   const [displayModeList, setDisplayModeList] = useState<boolean>(false);
-  const [loading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { dispatchAPI, user } = useContext(AuthContext) as AuthContextType<any>;
 
-  const saveTodo = ({ title }: ITodo) => {
+  const getTodos = async () => {
+    setLoading(true);
+    try {
+      const { data } = await dispatchAPI({
+        type: "GET",
+        options: { url: "/todos" },
+      });
+
+      const newListSorted: ITodo[] = data?.todos
+        ?.sort(
+          (dateA: { created_date: string }, dateB: { created_date: string }) =>
+            dateB.created_date.localeCompare(dateA.created_date)
+        )
+        .sort((todo: ITodo) => (!todo.status ? -1 : 1));
+
+      setTodos(newListSorted);
+      setLoading(false);
+    } catch (error) {
+      warning({ content: `Erreur serveur: ${error}` });
+    }
+  };
+
+  const createTodo = async ({ title }: ITodo) => {
+    setLoading(true);
     const newTodo: ITodo = {
-      id: Math.round(Math.random() * 10000).toString(),
       title: title,
       status: false,
-      createdDate: new Date(),
+      created_date: new Date(),
+      prevState: null,
+      user_id: user.id,
+      tasks: [],
     };
-
-    const newList = [...todos, newTodo];
-    const newListSorted = newList.sort(
-      (dateA, dateB) =>
-        dateB.createdDate.getTime() - dateA.createdDate.getTime()
-    );
-
-    setTodos(newListSorted);
+    try {
+      await dispatchAPI({
+        type: "POST",
+        options: { url: `/todos`, body: newTodo },
+      });
+    } catch (error) {
+      warning({ content: `Erreur serveur: ${error}` });
+    }
+    getTodos();
 
     success({ content: "New todo is created !" });
   };
 
-  const changeStatusTodo = (id: string) => {
-    const newList = todos.filter((todo: ITodo) => {
-      if (todo.id === id) {
-        todo.status = !todo.status;
-        return todo;
-      }
-      return todo;
-    });
+  const getTodo = async (id: string) => {
+    setLoading(true);
+    try {
+      const { data } = await dispatchAPI({
+        type: "GET",
+        options: {
+          url: `/todos/${id}`,
+        },
+      });
+      setTodoSelected(data.todo);
+    } catch (error) {
+      warning({ content: `Erreur serveur: ${error}` });
+    }
+    setLoading(false);
+  };
 
-    const newListSorted = newList.sort((todo) => {
-      return todo.status ? 1 : -1;
-    });
-
-    setTodos(newListSorted);
+  const updateTodo = async (todoToUpdate: ITodo) => {
+    setLoading(true);
+    try {
+      await dispatchAPI({
+        type: "PATCH",
+        options: {
+          url: `/todos/${todoToUpdate._id}`,
+          body: todoToUpdate,
+        },
+      });
+    } catch (error) {
+      warning({ content: `Erreur serveur: ${error}` });
+    }
+    setTodoSelected(undefined);
+    getTodos();
 
     success({ content: "Todo is updated !" });
   };
 
-  const removeTodo = (id: string) => {
-    console.log(id);
-    const newListTodosAfterDeletion = todos.filter(
-      (todo: ITodo) => todo.id !== id
-    );
+  const changeStatusTodo = async (todoSelected: ITodo) => {
+    setLoading(true);
+    try {
+      await dispatchAPI({
+        type: "PATCH",
+        options: {
+          url: `/todos/${todoSelected._id}`,
+          body: todoSelected,
+        },
+      });
+    } catch (error) {
+      warning({ content: `Erreur serveur: ${error}` });
+    }
 
-    setTodos(newListTodosAfterDeletion);
+    getTodos();
+
+    success({ content: "Todo is updated !" });
+  };
+
+  const removeTodo = async (id: string) => {
+    setLoading(true);
+    try {
+      await dispatchAPI({
+        type: "DELETE",
+        options: {
+          url: `/todos/${id}`,
+        },
+      });
+    } catch (error) {
+      warning({ content: `Erreur serveur: ${error}` });
+    }
+    getTodos();
 
     warning({ content: "Todo is removed !" });
   };
@@ -64,11 +136,15 @@ const TodoContextProvider = ({ children }: ChildrenProps) => {
       value={{
         todos,
         loading,
-        saveTodo,
+        createTodo,
         changeStatusTodo,
         displayModeList,
         setDisplayModeList,
         removeTodo,
+        getTodo,
+        todoSelected,
+        getTodos,
+        updateTodo,
       }}
     >
       {children}

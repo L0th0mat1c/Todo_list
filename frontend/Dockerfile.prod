@@ -8,6 +8,10 @@ RUN npm install -g npm@9.5.0
 
 RUN npm ci --silent --no-progress --ignore-optional
 
+RUN npm i -g date-fns date-fns-tz
+
+RUN npm install @types/date-fns --save-dev
+
 COPY . .
 
 RUN npm run build

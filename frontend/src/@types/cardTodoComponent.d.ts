@@ -1,12 +1,11 @@
 import { CardProps } from "antd";
+import { ITodo } from "./todo";
 
 export interface CardTodoComponentProps extends CardProps {
-  id: string;
-  title: string;
-  description?: string;
-  status: boolean;
+  todo: ITodo;
   actions?: Array<JSX.Element>;
   loading: boolean;
-  checkOnClick: (id: string) => void;
+  checkOnClick: (todoSelected: ITodo) => void;
   removeTodo: (id: string) => void;
+  getTodo: (id: string) => void;
 }

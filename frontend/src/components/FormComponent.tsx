@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Button, Form } from "antd";
 import { FormLayout } from "antd/es/form/Form";
 import useGenerateFormItem from "src/utils/useGenerateFormItem";
@@ -6,16 +6,22 @@ import { FormComponentProps } from "src/@types/formComponent";
 
 const FormComponent = ({
   onFinish,
+  data = undefined,
   layout = "inline",
   name = "default-form",
   fields,
+  extra,
+  withUpdate = true,
 }: FormComponentProps): JSX.Element => {
   const [form] = Form.useForm();
   const [, forceUpdate] = useState({});
   const { generateField } = useGenerateFormItem();
 
   useEffect(() => {
-    forceUpdate({});
+    if (withUpdate) forceUpdate({});
+    if (data) {
+      setValues();
+    }
   }, []);
 
   const handleSubmit = (values: object | null) => {
@@ -24,6 +30,12 @@ const FormComponent = ({
     form.resetFields();
   };
 
+  const setValues = useCallback(() => {
+    if (data) {
+      form.setFieldsValue(data);
+    }
+  }, [data]);
+
   return (
     <Form
       form={form}
@@ -31,22 +43,15 @@ const FormComponent = ({
       layout={layout as FormLayout}
       onFinish={handleSubmit}
     >
-      {fields.map((field) => generateField(field))}
+      <>
+        {fields.map((field) => generateField(field))}
+        {extra}
+      </>
 
-      <Form.Item shouldUpdate>
-        {() => (
-          <Button
-            type="primary"
-            htmlType="submit"
-            disabled={
-              !form.isFieldsTouched(true) ||
-              !!form.getFieldsError().filter(({ errors }) => errors.length)
-                .length
-            }
-          >
-            Add todo
-          </Button>
-        )}
+      <Form.Item>
+        <Button type="primary" htmlType="submit">
+          Update todo
+        </Button>
       </Form.Item>
     </Form>
   );

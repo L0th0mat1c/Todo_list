@@ -6,18 +6,27 @@ module.exports = {
   mode: "development",
   output: {
     filename: "bundle.[fullhash].js",
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve(__dirname, "./dist"),
     clean: true,
   },
+  performance: {
+    hints: false,
+    maxEntrypointSize: 512000,
+    maxAssetSize: 512000,
+  },
   devServer: {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Content-type": "text/html",
+    },
     static: {
-      directory: path.resolve(__dirname, "dist"),
+      directory: path.resolve(__dirname, "./dist"),
     },
     historyApiFallback: true,
     port: 3000,
     open: true,
     hot: true,
-    compress: true,
+    // compress: true,
   },
   plugins: [
     new HtmlWebpackPlugin({

@@ -1,19 +1,37 @@
 import { Dispatch, SetStateAction } from "react";
 
 export interface ITodo {
-  id: string;
+  _id?: string | undefined;
   title: string;
   description?: string;
   status: boolean;
-  createdDate: Date;
+  created_date: Date | string;
+  prevState: null;
+  user_id: string;
+  tasks: ITask[];
+}
+
+export interface ITask {
+  _id?: string | undefined;
+  name_task: string;
+  status: boolean;
+}
+
+export interface IUpdateTaskForm {
+  todoTarget: ITodo;
+  idTask: string | undefined;
 }
 
 export type TodoContextType = {
   todos: ITodo[];
-  saveTodo: (todo: ITodo) => void;
+  createTodo: (todo: ITodo) => void;
+  todoSelected: ITodo | undefined;
   loading: boolean;
-  changeStatusTodo: (id: string) => void;
+  changeStatusTodo: (todoSelected: ITodo) => void;
   displayModeList: boolean;
   setDisplayModeList: Dispatch<SetStateAction<boolean>>;
   removeTodo: (id: string) => void;
+  getTodo: (id: string) => void;
+  getTodos: () => void;
+  updateTodo: (todoToUpdate: ITodo) => void;
 };

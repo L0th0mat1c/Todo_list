@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import bc from "bcrypt";
+import bc from "bcryptjs";
 import User from "../models/user";
 import jwt from "jsonwebtoken";
 import logger from "../utils/logger";

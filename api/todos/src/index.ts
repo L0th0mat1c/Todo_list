@@ -19,11 +19,27 @@ connect();
 
 const app = express();
 
-app.use(
-  cors({
-    origin: "http://localhost:8000",
-  })
-);
+const whitelist = ["http://localhost:3000", "http://localhost:8000"];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  exposedHeaders: ["set-cookie"],
+};
+app.use(cors(corsOptions));
+// app.use(
+//   cors({
+//     origin: "http://localhost:8000",
+//     credentials: true,
+//     exposedHeaders: ["set-cookie"],
+//   })
+// );
 
 app.use(responseTime());
 app.use(morganMiddleware);
