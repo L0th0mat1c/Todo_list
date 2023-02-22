@@ -5,12 +5,13 @@ import {
   TabletFilled,
 } from "@ant-design/icons";
 import { Badge, Card } from "antd";
-import Meta from "antd/es/card/Meta";
 import React from "react";
 import { useNavigate } from "react-router";
 import { CardTodoComponentProps } from "src/@types/cardTodoComponent";
 import { ITodo } from "src/@types/todo";
 import { colorsContext } from "src/utils/constants/colors";
+
+const { Meta } = Card;
 
 const CardTodoComponent = ({
   todo,

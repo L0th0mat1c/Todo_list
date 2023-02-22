@@ -16,6 +16,10 @@ export type AuthContextType<T> = {
   dispatchAPI: T;
   isTokenValid: () => boolean;
 };
+export interface IToken {
+  name: string;
+  exp: number;
+}
 
 export type LoginFunctionProps = {
   email: string;

@@ -4,7 +4,7 @@ import useFields from "./useFields";
 import { TodoContext } from "../../../contexts/TodoContext";
 import { ITodo, TodoContextType } from "src/@types/todo";
 import { useNavigate } from "react-router-dom";
-import { Button, Form, Input, Row, Space, Switch } from "antd";
+import { Button, Checkbox, Form, Input, Row } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 
 interface UpdateTodoFormProps {
@@ -17,7 +17,6 @@ const UpdateTodoForm = ({ data }: UpdateTodoFormProps): JSX.Element => {
   const navigate = useNavigate();
 
   const onFinish = (values: ITodo) => {
-    console.log(values);
     updateTodo({ ...values });
     navigate("/");
   };
@@ -42,8 +41,13 @@ const UpdateTodoForm = ({ data }: UpdateTodoFormProps): JSX.Element => {
                 >
                   <Input placeholder="Name task" />
                 </Form.Item>
-                <Form.Item {...restField} label="Done" name={[name, "status"]}>
-                  <Switch defaultChecked={false} />
+                <Form.Item
+                  valuePropName="checked"
+                  {...restField}
+                  label="Done"
+                  name={[name, "status"]}
+                >
+                  <Checkbox style={{ fontSize: 45 }} />
                 </Form.Item>
                 <div style={{ alignContent: "center" }}>
                   <MinusCircleOutlined onClick={() => remove(name)} />

@@ -21,13 +21,7 @@ const useFields = () => {
     {
       name: ["description"],
       rules: [],
-      input: (
-        <TextArea
-          rows={3}
-          //   prefix={<ExceptionOutlined />}
-          placeholder="Your todo description"
-        />
-      ),
+      input: <TextArea rows={3} placeholder="Your todo description" />,
     },
     {
       name: ["status"],

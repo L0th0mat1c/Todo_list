@@ -10,7 +10,8 @@ export const useStateWithSessionStorage = ({
   defaultValue = "{}",
 }: IlocalStorage) => {
   const [value, setValue] = useState<string>(
-    JSON.parse(sessionStorage.getItem(storageKey) || defaultValue)
+    storageKey &&
+      JSON?.parse(sessionStorage.getItem(storageKey || "test") || defaultValue)
   );
 
   useEffect(() => {
@@ -20,11 +21,16 @@ export const useStateWithSessionStorage = ({
 };
 
 export const useStateWithLocalStorage = ({
-  storageKey,
+  storageKey = "test",
   defaultValue = "{}",
 }: IlocalStorage) => {
   const [value, setValue] = useState(
-    JSON.parse(localStorage.getItem(storageKey) || defaultValue)
+    storageKey &&
+      JSON.parse(
+        JSON.stringify(
+          localStorage.getItem(storageKey || "test") || defaultValue
+        )
+      )
   );
 
   useEffect(() => {

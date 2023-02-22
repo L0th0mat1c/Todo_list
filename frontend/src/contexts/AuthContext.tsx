@@ -1,15 +1,16 @@
 import React, { createContext, useState } from "react";
 import { message } from "antd";
 import jwtDecode from "jwt-decode";
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosInstance, AxiosRequestConfig, ResponseType } from "axios";
 import { useStateWithLocalStorage } from "../utils/storage";
 import { ChildrenProps } from "src/@types/common";
 import {
   AuthContextType,
+  IToken,
   LoginFunctionProps,
   RegisterProps,
 } from "src/@types/auth";
-import useErrorMessage from "src/utils/useMessage";
+import useErrorMessage from "../utils/useMessage";
 
 export const AuthContext = createContext<AuthContextType<any> | null>(null);
 
@@ -32,7 +33,7 @@ export const AuthContextProvider = ({ children }: ChildrenProps) => {
   const [isValid, setIsValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const setSession = (accessToken: string) => {
+  const setSession = (accessToken: string | undefined) => {
     if (accessToken) {
       setToken(accessToken);
       setIsValid(true);
@@ -69,23 +70,23 @@ export const AuthContextProvider = ({ children }: ChildrenProps) => {
   };
 
   const logout = () => {
-    setSession("null");
+    setSession(undefined);
     setUser(null);
   };
 
   const isTokenValid = (): boolean => {
     if (!token) return false;
     try {
-      const decoded: object = jwtDecode(token);
+      const decoded: IToken = jwtDecode(token);
       const currentTime = Date.now() / 1000;
       if (decoded.exp < currentTime) {
         message.warning("token expirée");
-        setSession("null");
+        setSession(undefined);
         return false;
       }
     } catch (e) {
       message.warning("Token erroné");
-      setSession("null");
+      setSession(undefined);
       return false;
     }
     if (!isValid) {
@@ -94,10 +95,10 @@ export const AuthContextProvider = ({ children }: ChildrenProps) => {
     return true;
   };
 
-  interface AxiosConfigProps {
+  interface AxiosConfigProps extends AxiosRequestConfig<any> {
     url: string;
     method: string;
-    responseType: string;
+    responseType: ResponseType | undefined;
     data: object;
     headers: object;
   }
@@ -105,11 +106,9 @@ export const AuthContextProvider = ({ children }: ChildrenProps) => {
     url = "",
     method = "GET",
     body = undefined,
-    responseType = "json"
+    responseType = undefined
   ) => {
     try {
-      // isTokenValid();
-      console.log("ok");
       setIsLoading(true);
       const result = await axiosInstance<AxiosConfigProps>({
         url,
@@ -122,7 +121,6 @@ export const AuthContextProvider = ({ children }: ChildrenProps) => {
         },
       });
       setIsLoading(false);
-      console.log(result);
       return result;
     } catch (e) {
       setIsLoading(false);
