@@ -8,7 +8,7 @@ import {
   TabletFilled,
 } from "@ant-design/icons";
 import { Badge, Collapse, Descriptions, Divider, Row, Typography } from "antd";
-import React from "react";
+import React, { Fragment } from "react";
 import { CollapseTodoComponentProps } from "src/@types/collapseTodoComponent";
 import { ITask, ITodo, IUpdateTaskForm } from "src/@types/todo";
 import { format, parseISO } from "date-fns";
@@ -133,7 +133,7 @@ const CollapseTodoComponent = ({
               {todo.tasks &&
                 todo.tasks.length > 0 &&
                 todo.tasks.map(({ _id, name_task, status }) => (
-                  <>
+                  <Fragment key={_id}>
                     <Descriptions.Item label="Name task" span={2}>
                       <Title level={5}>{name_task}</Title>
                     </Descriptions.Item>
@@ -157,7 +157,7 @@ const CollapseTodoComponent = ({
                         />
                       )}
                     </Descriptions.Item>
-                  </>
+                  </Fragment>
                 ))}
             </Descriptions>
           </Panel>

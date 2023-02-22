@@ -13,7 +13,12 @@ const AddTodoForm = (): JSX.Element => {
   };
 
   return (
-    <FormComponent onFinish={onFinish} name="AddTodoForm" fields={fields} />
+    <FormComponent
+      onFinish={onFinish}
+      name="AddTodoForm"
+      fields={fields}
+      withUpdate={false}
+    />
   );
 };
 

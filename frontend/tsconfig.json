@@ -17,7 +17,7 @@
     "strictPropertyInitialization": true,
     "useUnknownInCatchVariables": true,
     "baseUrl": "./",
-    "module": "ES2022",
+    "module": "commonjs",
     "moduleResolution": "node",
     "target": "ES2022",
     "jsx": "react",
@@ -26,6 +26,12 @@
     "esModuleInterop": true,
     "isolatedModules": true
   },
-  "include": ["src/**/**/*"],
+  "include": [
+    "src/**/**/*",
+    "tests/components/Login.test.tsx",
+    "jest.config.ts",
+    "tests/components/CardTodoComponent.test.tsx",
+    "tests/testSetupFile.ts"
+  ],
   "exclude": ["node_modules"]
 }

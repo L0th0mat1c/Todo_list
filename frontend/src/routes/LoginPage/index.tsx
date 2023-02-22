@@ -6,15 +6,6 @@ import Login from "../../components/Login";
 const LoginPage = (): JSX.Element => {
   const [isLogin, setIslogin] = useState(true);
   return (
-    // <div
-    //   style={{
-    //     margin: "0px 600px 0px",
-    //     border: "0.2px solid",
-    //     padding: 50,
-    //   }}
-    // >
-
-    // </div>
     <Layout style={{ minHeight: "100%", display: "inherit" }}>
       <Row justify="center">
         <Col
