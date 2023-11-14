@@ -1,7 +1,6 @@
 # Todo list
 
-A fantastic product owner has a wonderful, amazing and revolutionary idea... he wants to build a new Todo application.
-He has a good idea of the application behavior and comes with a backlog containing the following user stories :
+A classic Todo list.
 
 ## 📌 Table of Contents
 
